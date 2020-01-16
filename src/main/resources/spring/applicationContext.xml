@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <mvc:annotation-driven/>
+    <context:annotation-config/>
+
+    <context:property-placeholder location="classpath:database/database.properties"/>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${db.user}"/>
+        <property name="password" value="${db.pwd}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="driverClass" value="${db.driver}"/>
+        <property name="initialPoolSize" value="${pool.init}"/>
+        <property name="maxPoolSize" value="${pool.max}"/>
+        <property name="minPoolSize" value="${pool.min}"/>
+        <property name="maxIdleTime" value="${pool.idle}"/>
+    </bean>
+
+    <context:component-scan base-package="cn.dx"/>
+    <bean id="schedulerBeanFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!-- 注入数据源，包含任务执行表 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!--applicationContextSchedulerContextKey：
+            把spring上下文以key/value的方式存放在了quartz的上下文中了，
+            可以用applicationContextSchedulerContextKey所定义的key得到对应的spring上下文-->
+        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+        <!-- 读取配置文件 -->
+        <property name="configLocation" value="classpath:quarz/quartz.properties"/>
+        <property name="autoStartup" value="true"/>
+    </bean>
+</beans>

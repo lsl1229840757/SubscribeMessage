@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="SubscribeMessage:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="SubscribeMessage-0.1.0.war">
+      <element id="artifact" artifact-name="SubscribeMessage:war exploded" />
+    </root>
+  </artifact>
+</component>
